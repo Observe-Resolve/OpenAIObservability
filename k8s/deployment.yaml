@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: travel-advisor-azure
-          image: thisthatdc/travel-advisor-azure:v0.1.0
+          image: hrexed/travel-advisor-azure:0.1
           ports:
             - name: http
               containerPort: 8080

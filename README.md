@@ -45,8 +45,6 @@ cd OpenAIObservability
 
 ## Getting started
 
-
-
 ### Dynatrace Tenant
 #### 1. Dynatrace Tenant - start a trial
 If you don't have any Dynatrace tenant , then I suggest to create a trial using the following link : [Dynatrace Trial](https://dt-url.net/observable-trial)

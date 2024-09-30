@@ -133,12 +133,11 @@ kubectl create secret generic dynatrace  --from-literal=dynatrace_oltp_url="$DTU
 kubectl label namespace  default oneagent=false
 kubectl apply -f opentelemetry/rbac.yaml
 kubectl apply -f opentelemetry/openTelemetry-manifest_statefulset.yaml
-
-
+kubectl apply -f opentelemetry/openTelemetry-manifest_ds.yaml
 
 #deploy demo application
 kubectl create ns travel-advisor-azure
-kubectl label namespace  ravel-advisor-azure oneagent=false
+kubectl label namespace  travel-advisor-azure oneagent=false
 kubectl create secret generic azure --from-literal key="$OPENAITOKEN" --from-literal endpoint="$OPENAIHOST"  -n travel-advisor-azure
 kubectl apply -f k8s/deployment.yaml -n travel-advisor-azure
 kubectl apply -f k8s/loadtest.yaml
