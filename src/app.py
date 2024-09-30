@@ -38,7 +38,7 @@ def read_secret(secret: str):
 # GLOBALS
 AI_MODEL = os.environ.get("AI_MODEL", "genai-demo")
 AI_EMBEDDING_MODEL = os.environ.get("AI_EMBEDDING_MODEL", "text-embedding-ada-002")
-OTEL_ENDPOINT = os.environ.get("OTEL_ENDPOINT", "https://xbw95514.dev.dynatracelabs.com/api/v2/otlp")
+OTEL_ENDPOINT = os.environ.get("OTEL_ENDPOINT", "http://otel-collector.default.svc.cluster.local:4318")
 
 if OTEL_ENDPOINT.endswith("/v1/traces"):
     OTEL_ENDPOINT = OTEL_ENDPOINT[:OTEL_ENDPOINT.find("/v1/traces")]
@@ -66,7 +66,7 @@ provider = TracerProvider(resource=resource)
 trace.set_tracer_provider(provider)
 otel_tracer = trace.get_tracer("travel.advisor")
 
-Traceloop.init(app_name="travel-advisor-azure", api_endpoint=OTEL_ENDPOINT, disable_batch=True, headers=headers)
+Traceloop.init(app_name="travel-advisor-azure", api_endpoint=OTEL_ENDPOINT,should_enrich_metrics=True, disable_batch=True, headers=headers)
 
 MAX_PROMPT_LENGTH = 50
 retrieval_chain = None
