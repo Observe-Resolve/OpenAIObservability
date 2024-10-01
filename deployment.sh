@@ -95,15 +95,7 @@ if [ -z "$OPENAIHOST" ]; then
 helm upgrade --install ingress-nginx ingress-nginx  --repo https://kubernetes.github.io/ingress-nginx  --namespace ingress-nginx --create-namespace --set controller.opentelemetry.enabled=true --set controller.metrics.enabled=true \
                                                                                                                                                                                                 --set-string controller.podAnnotations."prometheus\.io/scrape"="true" \
                                                                                                                                                                                                 --set-string controller.podAnnotations."prometheus\.io/port"="10254"
-#### Deploy the cert-manager
-echo "Deploying Cert Manager ( for OpenTelemetry Operator)"
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.0/cert-manager.yaml
-# Wait for pod webhook started
-kubectl wait pod -l app.kubernetes.io/component=webhook -n cert-manager --for=condition=Ready --timeout=2m
-# Deploy the opentelemetry operator
-sleep 10
-echo "Deploying the OpenTelemetry Operator"
-kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
+
 CLUSTERID=$(kubectl get namespace kube-system -o jsonpath='{.metadata.uid}');
 
 #### Deploy the Dynatrace Operator
@@ -132,8 +124,8 @@ sed -i "s,IP_TO_REPLACE,$IP," k8s/deployment.yaml
 kubectl create secret generic dynatrace  --from-literal=dynatrace_oltp_url="$DTURL" --from-literal=clustername="$CLUSTERNAME"  --from-literal=clusterid=$CLUSTERID  --from-literal=dt_api_token="$DTTOKEN"
 kubectl label namespace  default oneagent=false
 kubectl apply -f opentelemetry/rbac.yaml
-kubectl apply -f opentelemetry/openTelemetry-manifest_statefulset.yaml
-kubectl apply -f opentelemetry/openTelemetry-manifest_ds.yaml
+helm install otel open-telemetry/opentelemetry-collector -f opentelemetry/values_st.yaml
+helm install oteld open-telemetry/opentelemetry-collector -f opentelemetry/value_ds.yaml
 
 #deploy demo application
 kubectl create ns travel-advisor-azure

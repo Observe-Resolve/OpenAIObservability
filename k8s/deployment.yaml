@@ -21,7 +21,7 @@ spec:
               protocol: TCP
           env:
             - name: OTEL_ENDPOINT
-              value: "http://otel-collector.default.svc.cluster.local:4318"
+              value: "http://otel.default.svc.cluster.local:4318"
           imagePullPolicy: Always
           volumeMounts:
             - name: secrets

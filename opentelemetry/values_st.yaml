@@ -196,12 +196,12 @@ config:
             - set(attributes["k8s.object.nodeselector"], String(cache["nodeSelector"])) where cache["nodeSelector"]!= nil
             - set(attributes["k8s.node.name"], cache["nodeName"]) where cache["nodeName"]!= nil
             - set(attributes["k8s.status"],cache["status"]) where cache["status"] != nil
-    transform/historgram:
+    transform/histogram:
       error_mode: propagate
       metric_statements:
         - context: metric
           statements:
-            - convert_exponential_hist_to_explicit_hist("random", [10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0])
+            - convert_exponential_histogram_to_histogram("random", [10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0])
     transform:
       error_mode: ignore
       log_statements:
@@ -260,7 +260,7 @@ config:
         exporters: [ otlphttp ]
       metrics:
         receivers: [ otlp,prometheus ]
-        processors: [ memory_limiter,k8sattributes,transform, transform/historgram,cumulativetodelta,batch ]
+        processors: [ memory_limiter,k8sattributes,transform, transform/histogram,cumulativetodelta,batch ]
         exporters: [ otlphttp ]
       logs:
         receivers: [ otlp ]
